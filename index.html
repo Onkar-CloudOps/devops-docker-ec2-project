@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daily Needs – Dark theme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1713; --surface:#17231c; --ink:#eaf2ec; --muted:#9bb0a3; --line:#2a3b31;
+  --leaf:#4cc283; --leaf-ink:#06160d; --sun:#f6c445; --sun-ink:#3a2c00; --tile:#213329;
+  color-scheme: dark;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque",Figtree,system-ui,sans-serif;line-height:1.08;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font:800 1.35rem "Bricolage Grotesque",sans-serif;text-decoration:none}
+.logo span{color:var(--leaf)}
+.hours{font-size:.9rem;color:var(--muted)}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;padding:28px 0 44px}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;letter-spacing:-.02em}
+.hero p{color:var(--muted);max-width:46ch;font-size:1.08rem;margin:16px 0 24px}
+.btn{display:inline-block;border:0;border-radius:999px;padding:13px 24px;font:600 1rem Figtree,sans-serif;cursor:pointer;text-decoration:none;background:var(--leaf);color:var(--leaf-ink)}
+.btn.alt{background:var(--sun);color:var(--sun-ink)}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;transform:rotate(1.5deg)}
+.list h3{font-size:1.15rem;margin-bottom:10px}
+.list ul{list-style:none;margin:0;padding:0}
+.list li{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line)}
+.list li:last-child{border:0}
+.list b{font-weight:600}
+.list s{color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;padding:18px 0;border-block:1px solid var(--line);color:var(--muted);font-size:.95rem}
+.facts strong{color:var(--ink)}
+#shop{padding:48px 0 24px}
+#shop h2{font-size:clamp(1.7rem,4vw,2.4rem)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 24px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font:500 .95rem Figtree,sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.pic{background:var(--tile);border-radius:12px;height:96px;display:grid;place-items:center;font-size:2.6rem}
+.card h3{font-size:1.05rem;font-weight:700;margin-top:6px}
+.card .unit{color:var(--muted);font-size:.88rem}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:8px}
+.price{font:700 1.15rem "Bricolage Grotesque",sans-serif}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:1.15rem;cursor:pointer}
+.add{border:0;background:var(--leaf);color:var(--leaf-ink);border-radius:999px;padding:8px 16px;font:600 .92rem Figtree,sans-serif;cursor:pointer}
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:56px 0 130px}
+.visit h2{font-size:1.8rem;margin-bottom:12px}
+.visit p{margin:6px 0;color:var(--muted)}
+.visit p strong{color:var(--ink)}
+footer{border-top:1px solid var(--line);padding:20px 0 110px;color:var(--muted);font-size:.9rem}
+.cartbar{position:fixed;left:0;right:0;bottom:0;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s}
+.cartbar.on{transform:none}
+.cartbar .in{max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cartbar small{color:var(--muted);display:block}
+.cartbar b{font:700 1.25rem "Bricolage Grotesque",sans-serif}
+@media (max-width:760px){.hero,.visit{grid-template-columns:1fr}.list{transform:none}.hours{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cartbar{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#">Daily<span>Needs</span></a>
+    <span class="hours">Open every day, 7 am – 10 pm</span>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Everything for today’s kitchen and home.</h1>
+      <p>Fresh vegetables, milk, staples and household basics from your neighbourhood store. Pick what you need, send the list on WhatsApp, and we deliver within 45 minutes.</p>
+      <a class="btn" href="#shop">Start your basket</a>
+    </div>
+    <aside class="list" aria-label="Sample basket">
+      <h3>A typical morning basket</h3>
+      <ul>
+        <li><span>Milk, 1 L</span><b>₹66</b></li>
+        <li><span>Eggs, 12</span><b>₹96</b></li>
+        <li><span>Tomatoes, 1 kg</span><b>₹40</b></li>
+        <li><span>Bananas, 1 dozen</span><b>₹60</b></li>
+        <li><span>Delivery within 2 km</span><b>Free</b></li>
+      </ul>
+    </aside>
+  </section>
+
+  <div class="facts">
+    <span><strong>45 min</strong> delivery nearby</span>
+    <span><strong>Free</strong> above ₹299</span>
+    <span><strong>Cash, UPI</strong> on delivery</span>
+    <span><strong>Fresh stock</strong> every morning</span>
+  </div>
+
+  <section id="shop">
+    <h2>Shop by what you need</h2>
+    <div class="chips" id="chips" role="group" aria-label="Categories"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="visit">
+    <div>
+      <h2>Visit the store</h2>
+      <p><strong>Daily Needs General Store</strong></p>
+      <p>Shop 4, Main Road, Pimpri, Pune</p>
+      <p>Open every day, 7 am – 10 pm</p>
+    </div>
+    <div>
+      <h2>Order by phone</h2>
+      <p>Call or WhatsApp us with your list, or build it above and send it in one tap.</p>
+      <p><strong>+91 00000 00000</strong></p>
+    </div>
+  </section>
+</div>
+
+<footer><div class="wrap">© 2026 Daily Needs. Prices are per pack and may change with the market.</div></footer>
+
+<div class="cartbar" id="bar" aria-live="polite">
+  <div class="in">
+    <div><small id="count">0 items</small><b id="total">₹0</b></div>
+    <a class="btn alt" id="send" href="#" target="_blank" rel="noopener">Send order on WhatsApp</a>
+  </div>
+</div>
+
+<script>
+var PHONE = "910000000000"; // Replace with the shop's WhatsApp number, country code first
+var P = [
+  ["Basmati rice","5 kg",310,"🍚","Groceries"],
+  ["Toor dal","1 kg",165,"🫘","Groceries"],
+  ["Wheat atta","5 kg",240,"🌾","Groceries"],
+  ["Sunflower oil","1 L",140,"🛢️","Groceries"],
+  ["Tea powder","250 g",125,"🍵","Groceries"],
+  ["Full cream milk","1 L",66,"🥛","Dairy and eggs"],
+  ["Eggs","12 pack",96,"🥚","Dairy and eggs"],
+  ["Paneer","200 g",85,"🧀","Dairy and eggs"],
+  ["Tomatoes","1 kg",40,"🍅","Fruit and veg"],
+  ["Onions","1 kg",35,"🧅","Fruit and veg"],
+  ["Bananas","1 dozen",60,"🍌","Fruit and veg"],
+  ["Potatoes","1 kg",32,"🥔","Fruit and veg"],
+  ["Detergent powder","1 kg",130,"🧺","Household"],
+  ["Dish wash liquid","500 ml",99,"🧼","Household"],
+  ["Toothpaste","150 g",95,"🪥","Household"],
+  ["Toilet paper","4 rolls",120,"🧻","Household"]
+];
+var cats = ["All","Groceries","Dairy and eggs","Fruit and veg","Household"];
+var cur = "All", cart = {};
+var chips = document.getElementById("chips"), grid = document.getElementById("grid");
+
+function drawChips(){
+  chips.innerHTML = "";
+  cats.forEach(function(c){
+    var b = document.createElement("button");
+    b.className = "chip"; b.textContent = c;
+    b.setAttribute("aria-pressed", c === cur);
+    b.onclick = function(){ cur = c; drawChips(); drawGrid(); };
+    chips.appendChild(b);
+  });
+}
+function drawGrid(){
+  grid.innerHTML = "";
+  P.forEach(function(p, i){
+    if (cur !== "All" && p[4] !== cur) return;
+    var q = cart[i] || 0;
+    var d = document.createElement("article");
+    d.className = "card";
+    d.innerHTML = '<div class="pic" aria-hidden="true">' + p[3] + '</div><h3>' + p[0] + '</h3><span class="unit">' + p[1] + '</span>' +
+      '<div class="row"><span class="price">₹' + p[2] + '</span>' +
+      (q ? '<div class="qty"><button aria-label="Remove one ' + p[0] + '" data-d="-1">−</button><span>' + q + '</span><button aria-label="Add one ' + p[0] + '" data-d="1">+</button></div>'
+         : '<button class="add" data-d="1">Add</button>') + '</div>';
+    d.querySelectorAll("button").forEach(function(b){
+      b.onclick = function(){ change(i, +b.dataset.d); };
+    });
+    grid.appendChild(d);
+  });
+}
+function change(i, d){
+  cart[i] = Math.max(0, (cart[i] || 0) + d);
+  if (!cart[i]) delete cart[i];
+  drawGrid(); drawBar();
+}
+function drawBar(){
+  var n = 0, t = 0, lines = [];
+  Object.keys(cart).forEach(function(i){
+    var p = P[i], q = cart[i];
+    n += q; t += q * p[2];
+    lines.push(q + " x " + p[0] + " (" + p[1] + ") - Rs " + (q * p[2]));
+  });
+  document.getElementById("count").textContent = n + (n === 1 ? " item" : " items");
+  document.getElementById("total").textContent = "₹" + t;
+  document.getElementById("bar").classList.toggle("on", n > 0);
+  var msg = "Hello Daily Needs, I would like to order:\n" + lines.join("\n") + "\nTotal: Rs " + t;
+  document.getElementById("send").href = "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(msg);
+}
+drawChips(); drawGrid(); drawBar();
+</script>
+</body>
+</html>
